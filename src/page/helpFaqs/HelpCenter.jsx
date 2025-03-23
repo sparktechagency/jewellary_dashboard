@@ -8,28 +8,24 @@ import { useNavigate } from "react-router-dom";
 import Profile from "../../assets/header/profileLogo.png";
 import { Reply } from "./Reply";
 import Navigate from "../../Navigate";
-
-
-
+import { useGetContactQuery } from "../redux/api/manageApi";
 
 const HelpCenter = () => {
   const [modal2Open, setModal2Open] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState(null);
-  const [editModal, setEditModal] = useState(false);
+  const { data: contactData = [] } = useGetContactQuery();
+  console.log(contactData)
   const navigate = useNavigate();
 
-  const userData = [
-    {
-      key: "1",
-      sl: 1,
-      userName: "John Doe",
-      message: "John Doe",
-      date: "1990-05-14",
-      contactNumber: "1234567890",
-      email: "john@example.com",
-      
-    },
-  ];
+  const userData = contactData.map((item, index) => ({
+    key: item._id,
+    sl: index + 1,
+    date: new Date(item.createdAt).toLocaleDateString(),
+    userName: item.name,
+    contactNumber: item.phone,
+    email: item.email,
+    message: item.message,
+  }));
 
   const openModal = (record) => {
     setSelectedRecord(record);
@@ -39,13 +35,6 @@ const HelpCenter = () => {
   const closeModal = () => {
     setModal2Open(false);
     setSelectedRecord(null);
-  };
-
-
-
-  const handleEdit = (record) => {
-    
-    setEditModal(true);
   };
 
   const columns = [
@@ -65,16 +54,11 @@ const HelpCenter = () => {
       width: 150,
       render: (text) => (
         <Space>
-          <img
-            src="https://via.placeholder.com/32"
-            alt="avatar"
-            style={{ borderRadius: "50%", width: 32, height: 32 }}
-          />
+        
           {text}
         </Space>
       ),
     },
-   
     {
       title: "Email",
       dataIndex: "email",
@@ -93,29 +77,22 @@ const HelpCenter = () => {
       align: "center",
       render: (_, record) => (
         <Space size="middle">
-          <button className="" onClick={() => openModal(record)}>
-            <span className="bg-black text-[white] w-[35px] h-[35px] flex justify-center items-center rounded text-xl ">
+          <button onClick={() => openModal(record)}>
+            <span className="bg-black text-white w-[35px] h-[35px] flex justify-center items-center rounded text-xl">
               <LuEye />
             </span>
           </button>
-          <button
-          onClick={() => handleEdit(record)}
-            className="bg-[#0022FF] text-[white] w-[35px] h-[35px] flex justify-center items-center rounded text-xl "
-          >
-            <MdModeEditOutline />
-          </button>
+         
         </Space>
       ),
     },
   ];
 
   return (
-    <div className=" mx-auto h-screen bg-white p-3">
-    <div className="flex justify-between pb-4">
-      <div className="flex justify-between ">
-        <Navigate title={"Help Center"}></Navigate>
+    <div className="mx-auto h-screen bg-white p-3">
+      <div className="flex justify-between pb-4">
+        <Navigate title={"Help Center"} />
       </div>
-    </div>
 
       <Table
         columns={columns}
@@ -124,40 +101,35 @@ const HelpCenter = () => {
       />
 
       <Modal
-      title="Details"
+        title="Details"
         centered
         open={modal2Open}
         onCancel={closeModal}
         footer={null}
         closable={true}
         width={400}
-     
         className="no-border-radius-modal"
         closeIcon={<span className="text-lg text-black">×</span>}
       >
-       
         <div>
           <div className="grid grid-cols-2">
-          <div className="text-lg gap-4">
+            <div className="text-lg gap-4">
               <h4>User Name</h4>
               <h4>Date</h4>
               <h4>Contact Number:</h4>
               <h4>Email:</h4>
-              <h4>Status:</h4>
+              <h4>Message:</h4>
             </div>
-            <div className="gap-4 text-lg ">
+            <div className="gap-4 text-lg">
               <h3>{selectedRecord?.userName || "N/A"}</h3>
               <h3>{selectedRecord?.date || "N/A"}</h3>
               <h3>{selectedRecord?.contactNumber || "N/A"}</h3>
               <h3>{selectedRecord?.email || "N/A"}</h3>
               <h3>{selectedRecord?.message || "N/A"}</h3>
-             
             </div>
           </div>
         </div>
       </Modal>
-      <Reply editModal={editModal}
-        setEditModal={setEditModal}></Reply>
     </div>
   );
 };

@@ -7,9 +7,11 @@ import { CategoryEdit } from "./CategoryEdit";
 import Navigate from "../../Navigate";
 import { AddCategories } from "./AddCategories";
 import { useGetCategoryQuery } from "../redux/api/categoryApi";
+import { useDeleteCategoryMutation } from "../redux/api/manageApi";
 
 const Categories = () => {
   const [openAddModal, setOpenAddModal] = useState(false);
+  const [deleteCategory] = useDeleteCategoryMutation();
   const { data: category, isLoading, error } = useGetCategoryQuery();
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [editModal, setEditModal] = useState(false);
@@ -29,6 +31,17 @@ const Categories = () => {
   const handleEdit = (record) => {
     setSelectedCategory(record);
     setEditModal(true);
+  };
+
+  
+  const handleDeleteCategory = async (id) => {
+    console.log(id)
+    try {
+      const res = await deleteCategory( id ).unwrap(); // send { id: "..." }
+      message.success(res?.message);
+    } catch (error) {
+      message.error(error?.data?.message || 'Error deleting FAQ');
+    }
   };
 
   const columns = [
@@ -78,7 +91,7 @@ const Categories = () => {
           >
             <MdModeEditOutline />
           </button>
-          <button className="bg-[#DC4600] text-white w-[35px] h-[35px] flex justify-center items-center rounded text-xl ">
+          <button onClick={() => handleDeleteCategory(record?.key)} className="bg-[#DC4600] text-white w-[35px] h-[35px] flex justify-center items-center rounded text-xl ">
             <RiDeleteBin6Line />
           </button>
         </Space>

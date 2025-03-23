@@ -39,20 +39,20 @@ const RepairCustomOrder = () => {
 
   // Map the data from the API to the format used by the table
   const userData = orderRepair.map((order, index) => ({
-    key: order._id,
+    key: order?._id,
     sl: index + 1,
-    orderType: order.order_type,
-    name: order.custom_order_details.name,
-    shippingAddress: order.custom_order_details.address,
-    date: new Date(order.createdAt).toLocaleDateString(),
-    contactNumber: order.custom_order_details.phone,
-    jewelry_type: order.custom_order_details.jewelry_type,
-    email: order.custom_order_details.email,
-    description: order.custom_order_details.description,
-    order_status: order.order_status,
-    custom_order_price: order.custom_order_price,
-    paymentStatus: order.payment_status,
-    image_url: order.custom_order_details.image_url,
+    orderType: order?.order_type,
+    name: order?.custom_order_details?.name,
+    shippingAddress: order?.custom_order_details?.address,
+    date: new Date(order?.createdAt).toLocaleDateString(),
+    contactNumber: order?.custom_order_details?.phone,
+    jewelry_type: order?.custom_order_details?.jewelry_type,
+    email: order?.custom_order_details?.email,
+    description: order?.custom_order_details?.description,
+    order_status: order?.order_status,
+    custom_order_price: order?.custom_order_price,
+    paymentStatus: order?.payment_status,
+    image_url: order?.custom_order_details?.image_url,
   }));
 
   const columns = [

@@ -44,6 +44,15 @@ const category = baseApi.injectEndpoints({
       invalidatesTags: ["updateProfile"],
     }),
 
+    deleteProduct: builder.mutation({
+      query: (data) => ({
+        url: `/admin/products`,
+        method: "DELETE",
+        body: {id:data},
+      }),
+      invalidatesTags: ["updateProfile"],      
+    }),
+
       updateCategory: builder.mutation({
       query: (data) => {
         return {
@@ -140,5 +149,6 @@ useGetSubCategoryQuery,
 useAddProductMutation,
 useGetAllProductQuery,
 useUpdateCategoryMutation,
-useUpdateProductMutation
+useUpdateProductMutation,
+useDeleteProductMutation
 } = category;

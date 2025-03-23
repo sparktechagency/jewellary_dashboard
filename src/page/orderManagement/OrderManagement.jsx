@@ -19,16 +19,16 @@ const OrderManagement = () => {
   if (isError) return <p>Failed to load orders</p>;
 
   const orders = orderData?.map((order, index) => ({
-    key: order._id,
+    key: order?._id,
     sl: index + 1,
-    date: new Date(order.createdAt).toLocaleDateString(),
-    total: order.ready_made_details.products.reduce(
-      (sum, item) => sum + (item.product_id.discount_price || item.product_id.price) * item.quantity,
+    date: new Date(order?.createdAt).toLocaleDateString(),
+    total: order?.ready_made_details?.products.reduce(
+      (sum, item) => sum + (item?.product_id?.discount_price || item?.product_id?.price) * item?.quantity,
       0
     ),
-    shippingAddress: order.ready_made_details.shipping_address,
-    paymentStatus: order.payment_status,
-    orderStatus: order.order_status,
+    shippingAddress: order?.ready_made_details?.shipping_address,
+    paymentStatus: order?.payment_status,
+    orderStatus: order?.order_status,
     details: order,
   }));
 

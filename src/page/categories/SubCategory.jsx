@@ -14,6 +14,7 @@ import { SubCategoryEdit } from "./SubCategoryEdit";
 import Navigate from "../../Navigate";
 import { AddSubCategories } from "./AddSubCategories";
 import { useGetSubCategoryQuery } from "../redux/api/categoryApi";
+import { useDeleteCategoryMutation } from "../redux/api/manageApi";
 
 const SubCategory = () => {
   const { id } = useParams();
@@ -22,6 +23,7 @@ const SubCategory = () => {
     { refetchOnMountOrArgChange: true }
   );
   const [selectedSubCategory, setSelectedSubCategory] = useState(null);
+  const [deleteCategory] = useDeleteCategoryMutation();
 
   const [openAddModal, setOpenAddModal] = useState(false);
   const [editModal, setEditModal] = useState(false);
@@ -40,6 +42,15 @@ const SubCategory = () => {
   const handleEdit = (record) => {
     setSelectedSubCategory(record);
     setEditModal(true);
+  };
+  const handleDeleteCategory = async (id) => {
+    console.log(id)
+    try {
+      const res = await deleteCategory( id ).unwrap(); // send { id: "..." }
+      message.success(res?.message);
+    } catch (error) {
+      message.error(error?.data?.message || 'Error deleting FAQ');
+    }
   };
 
   const columns = [
@@ -80,8 +91,8 @@ const SubCategory = () => {
           >
             <MdModeEditOutline />
           </button>
-          <button className="">
-            <span className="bg-[#DC4600] text-[white] w-[35px] h-[35px] flex justify-center items-center rounded text-xl ">
+          <button onClick={() => handleDeleteCategory(record.key)} className="">
+            <span  className="bg-[#DC4600] text-[white] w-[35px] h-[35px] flex justify-center items-center rounded text-xl ">
               <RiDeleteBin6Line />
             </span>
           </button>

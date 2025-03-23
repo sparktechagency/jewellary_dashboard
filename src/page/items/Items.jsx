@@ -1,4 +1,4 @@
-import { Table, Modal, Space } from "antd";
+import { Table, Modal, Space, message } from "antd";
 import { useState } from "react";
 import { MdModeEditOutline } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
@@ -6,11 +6,12 @@ import { LuEye } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 import { AddItem } from "./AddItem";
 import { EditItem } from "./EditItem";
-import { useGetAllProductQuery } from "../redux/api/categoryApi";
+import { useDeleteProductMutation, useGetAllProductQuery } from "../redux/api/categoryApi";
 import Navigate from "../../Navigate";
 
 const Items = () => {
   const [openAddModal, setOpenAddModal] = useState(false);
+  const[deleteProduct] = useDeleteProductMutation()
   const { data: allProduct } = useGetAllProductQuery();
   const [modal2Open, setModal2Open] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -100,7 +101,7 @@ const Items = () => {
           >
             <MdModeEditOutline />
           </button>
-          <button className="">
+          <button onClick={() => handleDeleteFaq(record.id)}  className="">
             <span className="bg-[#DC4600] text-[white] w-[35px] h-[35px] flex justify-center items-center rounded text-xl ">
               <RiDeleteBin6Line />
             </span>
@@ -135,6 +136,17 @@ const Items = () => {
 
     };
   });
+
+  const handleDeleteFaq = async (id) => {
+    console.log(id)
+    
+    try {
+      const res = await deleteProduct( id ).unwrap(); // send { id: "..." }
+      message.success(res?.message);
+    } catch (error) {
+      message.error(error?.data?.message || 'Error deleting FAQ');
+    }
+  };
 
   return (
     <div className="h-screen bg-white p-3">
