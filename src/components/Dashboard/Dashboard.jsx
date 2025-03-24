@@ -15,7 +15,7 @@ const Dashboard = () => {
   const [selectedShop, setSelectedShop] = useState(null);
   const { data: appointment = [] } = useGetAppointmentQuery();
 
-  const dataSource = appointment?.slice(0,5)?.map((item, index) => ({
+  const dataSource = appointment?.appointments?.slice(0,5)?.map((item, index) => ({
     key: index + 1,
     userName: item.name,
     email: item.email,

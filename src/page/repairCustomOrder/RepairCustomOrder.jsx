@@ -38,7 +38,7 @@ const RepairCustomOrder = () => {
   };
 
   // Map the data from the API to the format used by the table
-  const userData = orderRepair.map((order, index) => ({
+  const userData = orderRepair?.orders?.map((order, index) => ({
     key: order?._id,
     sl: index + 1,
     orderType: order?.order_type,

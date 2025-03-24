@@ -11,7 +11,7 @@ const Apointment = () => {
   const [selectedShop, setSelectedShop] = useState(null);
   const { data: appointment = [] } = useGetAppointmentQuery();
 
-  const dataSource = appointment.map((item, index) => ({
+  const dataSource = appointment?.appointments?.map((item, index) => ({
     key: index + 1,
     userName: item.name,
     email: item.email,

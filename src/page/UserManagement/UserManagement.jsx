@@ -15,13 +15,13 @@ const UserManagement = () => {
 
   const userData =
     userManagement?.users?.map((user, index) => ({
-      key: user._id,
+      key: user?._id,
       sl: index + 1,
-      userName: user.name,
-      email: user.email,
-      contactNumber: user.phone,
-      address: `${user.shipping_address.street_address}, ${user.shipping_address.city}, ${user.shipping_address.state}, ${user.shipping_address.zip_code}`,
-      status: user.account_status,
+      userName: user?.name,
+      email: user?.email,
+      contactNumber: user?.phone,
+      address: `${user?.shipping_address?.street_address}, ${user?.shipping_address?.city}, ${user?.shipping_address?.state}, ${user?.shipping_address?.zip_code}`,
+      status: user?.account_status,
     })) || [];
 
     const handleBlockUnblock = async (record) => {

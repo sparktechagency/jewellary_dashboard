@@ -1,5 +1,3 @@
-
-
 const Settings = () => {
     return (
         <div>
@@ -7,5 +5,6 @@ const Settings = () => {
         </div>
     );
 };
+
 
 export default Settings;

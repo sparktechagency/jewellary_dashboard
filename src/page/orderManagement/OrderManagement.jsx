@@ -18,7 +18,7 @@ const OrderManagement = () => {
   if (isLoading) return <Spin indicator={<LoadingOutlined />} />;
   if (isError) return <p>Failed to load orders</p>;
 
-  const orders = orderData?.map((order, index) => ({
+  const orders = orderData?.orders?.map((order, index) => ({
     key: order?._id,
     sl: index + 1,
     date: new Date(order?.createdAt).toLocaleDateString(),
