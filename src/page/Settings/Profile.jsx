@@ -3,17 +3,20 @@ import { Avatar, Upload, Form, Input, Button, message } from "antd";
 import { IoCameraOutline } from "react-icons/io5";
 import { PasswordTab } from "./PasswordTab";
 import Navigate from "../../Navigate";
+import { useGetProfileQuery, useUpdateProfileMutation } from "../redux/api/userApi";
 
 
 
 
 
 const Profile = () => {
-  const [profilePic, setProfilePic] = useState(null);
-  const [activeTab, setActiveTab] = useState("1");
 
+  const [activeTab, setActiveTab] = useState("1");
+  const[updateProfile] = useUpdateProfileMutation();
   const [form] = Form.useForm();
   const [image, setImage] = useState();
+  const {data: profile} = useGetProfileQuery()
+  
 
 
   
@@ -23,71 +26,75 @@ const Profile = () => {
     setImage(file);
   };
 
-  
+ 
 
-  const handleProfileUpdate = async (values) => {
-   
-   
+
+  useEffect(() => {
+    if (profile) {
+      form.setFieldsValue({
+        name: profile.name,
+        email: profile.email,
+        phone: profile.phone,
+      });
+    }
+  }, [profile, form]);
+
+  const onEditProfile = async (values) => {
+    const data = new FormData();
+    if (image) data.append("photo", image);
+    data.append("name", values.name);
+    data.append("phone", values.phone);
+     try {
+          const response = await updateProfile(data).unwrap();
+          console.log(response)
+          message.success(response.message);
+
+        } catch (error) {
+          message.error(error.data.message);
+         
+          console.log(error);
+        }
   };
+
 
   const tabItems = [
     {
       key: "1",
       label: "Edit Profile",
       content: (
-        <Form
-          layout="vertical"
-          form={form}
-          onFinish={handleProfileUpdate} // Call the update functio
-        >
-          <h2 className="text-xl font-semibold mb-4 text-center">
-            Edit Your Profile
-          </h2>
-          <Form.Item
-            name="first"
-            label="First Name"
-            rules={[
-              { required: true, message: "Please enter your first name!" },
-            ]}
-          >
-            <Input className="py-2" placeholder="First Name" />
-          </Form.Item>
-          <Form.Item
-            name="last"
-            label="Last Name"
-            rules={[
-              { required: true, message: "Please enter your last name!" },
-            ]}
-          >
-            <Input className="py-2" placeholder="Last Name" />
-          </Form.Item>
+        <Form onFinish={onEditProfile} layout="vertical" form={form}>
+            <Form.Item name="name" label="Name">
+                <Input
+                  style={{ padding: "9px", borderRadius: "0px" }}
+                  placeholder="Enter name"
+                  rules={[{ required: true, message: "Please write a Email" }]}
+                />
+              </Form.Item>
 
-          <Form.Item
-            name="email"
-            label="Email Address"
-            rules={[{ type: "email", message: "Invalid email format!" }]}
-          >
-            <Input className="py-2" placeholder="Email" disabled />
-          </Form.Item>
+              <Form.Item name="email" label="Email">
+                <Input
+                disabled
+                  style={{ padding: "9px", borderRadius: "0px" }}
+                  placeholder="Enter Email"
+                  rules={[{ required: true, message: "Please write a Email" }]}
+                />
+              </Form.Item>
 
-          <Form.Item
-            name="contactNo"
-            label="Contact No."
-            rules={[
-              { required: true, message: "Please enter your contact number!" },
-            ]}
-          >
-            <Input className="py-2" placeholder="Contact No" />
-          </Form.Item>
+              <Form.Item name="phone" label="Phone Number">
+                <Input
+                  style={{ padding: "9px", borderRadius: "0px" }}
+                  placeholder="Enter Phone Number"
+                  rules={[{ required: true, message: "Please write a Number" }]}
+                />
+              </Form.Item>
 
-          <Form.Item>
-           <div className="flex justify-center">
-           <button className="bg-[#9C5F46] text-white py-2 px-5" type="submit" htmlType="submit" block>
-              Save Changes
-            </button>
-           </div>
-          </Form.Item>
-        </Form>
+              <button
+                type="primary"
+                className="w-full bg-black text-white py-2"
+              >
+                Update
+              </button>
+            </Form>
       ),
     },
     {
@@ -116,7 +123,7 @@ const Profile = () => {
             src={`${
               image
                 ? URL.createObjectURL(image)
-                : `ff`
+                : `${profile?.photo_url}`
             }`}
             alt="Admin Profile"
           />
@@ -131,7 +138,7 @@ const Profile = () => {
         </div>
 
         <p className="text-lg font-semibold mt-4">
-          name
+          {profile?.name}
         </p>
       </div>
 
