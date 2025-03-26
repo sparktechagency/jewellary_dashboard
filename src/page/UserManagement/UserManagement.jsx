@@ -1,4 +1,4 @@
-import { Table, Input, Space, Spin, message } from "antd";
+import { Table, Input, Space, Spin, message, Pagination } from "antd";
 import { LoadingOutlined, SearchOutlined } from "@ant-design/icons";
 import { MdBlockFlipped } from "react-icons/md";
 import { useState } from "react";
@@ -7,10 +7,18 @@ import Navigate from "../../Navigate";
 import { useBlockUserMutation, useGetAllUserManagementQuery } from "../redux/api/userApi";
 
 const UserManagement = () => {
-  const { data: userManagement, isLoading } = useGetAllUserManagementQuery();
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10;
+  const { data: userManagement, isLoading } = useGetAllUserManagementQuery({page: currentPage,
+    limit: pageSize,});
+  console.log(userManagement)
   const [loadingId, setLoadingId] = useState(null);
   const[blockUser] = useBlockUserMutation()
   const navigate = useNavigate();
+  
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
 
   const userData =
@@ -91,6 +99,16 @@ const UserManagement = () => {
       ) : (
         <Table columns={columns} dataSource={userData} pagination={false} />
       )}
+       <div className="mt-4 flex justify-end">
+          <Pagination
+            current={currentPage}
+            pageSize={pageSize}
+            total={userManagement?.pagination?.totalUsers || 0}
+            onChange={handlePageChange}
+            showSizeChanger={false}
+            
+          />
+        </div>
     </div>
   );
 };

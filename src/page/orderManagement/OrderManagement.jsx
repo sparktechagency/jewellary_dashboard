@@ -106,6 +106,7 @@ const OrderManagement = () => {
         dataSource={orders}
         pagination={{ pageSize: 10, position: ["bottomCenter"] }}
       />
+      
 
       {/* Modal for Order Details */}
       <Modal

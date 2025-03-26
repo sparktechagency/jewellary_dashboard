@@ -84,9 +84,9 @@ const manage = baseApi.injectEndpoints({
     }),
 
     getContact: builder.query({
-      query: () => {
+      query: ({page,limit}) => {
         return {
-          url: `/admin/contact`,
+          url: `/admin/contact?page=${page}&limit=${limit}`,
           method: "GET",
         };
       },

@@ -1,4 +1,4 @@
-import { Table, Input, Space, Modal, Spin, message } from "antd";
+import { Table, Input, Space, Modal, Spin, message, Pagination } from "antd";
 import { LoadingOutlined, SearchOutlined } from "@ant-design/icons";
 import { MdBlockFlipped, MdModeEditOutline } from "react-icons/md";
 import { LuEye } from "react-icons/lu";
@@ -11,13 +11,18 @@ import Navigate from "../../Navigate";
 import { useGetContactQuery } from "../redux/api/manageApi";
 
 const HelpCenter = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10;
   const [modal2Open, setModal2Open] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState(null);
-  const { data: contactData = [] } = useGetContactQuery();
+  const { data: contactData = [] } = useGetContactQuery({page: currentPage,
+    limit: pageSize,});
   console.log(contactData)
   const navigate = useNavigate();
-
-  const userData = contactData.map((item, index) => ({
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+  const userData = contactData?.contacts?.map((item, index) => ({
     key: item._id,
     sl: index + 1,
     date: new Date(item.createdAt).toLocaleDateString(),
@@ -97,8 +102,18 @@ const HelpCenter = () => {
       <Table
         columns={columns}
         dataSource={userData}
-        pagination={{ pageSize: 10, position: ["bottomCenter"] }}
+        pagination={false}
       />
+      <div className="mt-4 flex justify-end">
+          <Pagination
+            current={currentPage}
+            pageSize={pageSize}
+            total={contactData?.pagination?.totalContacts || 0}
+            onChange={handlePageChange}
+            showSizeChanger={false}
+            
+          />
+        </div>
 
       <Modal
         title="Details"

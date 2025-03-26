@@ -23,9 +23,9 @@ const useApi = baseApi.injectEndpoints({
       providesTags: ["updateProfile"],
     }),
     getAllUserManagement: builder.query({
-      query: () => {
+      query: ({limit,page}) => {
         return {
-          url: "/admin/users",
+          url: `/admin/users?limit=${limit}&page=${page}`,
           method: "GET",
         };
       },

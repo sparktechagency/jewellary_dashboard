@@ -21,7 +21,24 @@
 
 
 
+.ant-pagination .ant-pagination-item {
+  background-color: white !important; 
+  border-color: white !important; 
+  
+}
 
+.ant-pagination .ant-pagination-item-active {
+  background-color: #234E6F !important;
+  border-color: #234E6F !important;
+}
+
+.ant-pagination .ant-pagination-item a {
+  color: black !important; 
+}
+
+.ant-pagination .ant-pagination-item-active a {
+  color: white !important;
+}
 
 
 select option {
