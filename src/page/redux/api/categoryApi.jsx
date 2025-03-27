@@ -14,9 +14,9 @@ const category = baseApi.injectEndpoints({
     }),
 
     getAllProduct: builder.query({
-      query: () => {
+      query: ({page,limit}) => {
         return {
-          url: `/products`,
+          url: `/products?limit=${limit}&page=${page}`,
           method: "GET",
         };
       },

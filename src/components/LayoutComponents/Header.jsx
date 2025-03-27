@@ -17,6 +17,8 @@ import logo from "../../assets/header/logo.png";
 import { FaChevronRight } from "react-icons/fa";
 
 import { IoIosLogIn } from "react-icons/io";
+import { useGetProfileQuery } from "../../page/redux/api/userApi";
+import { useGetDashboradQuery } from "../../page/redux/api/manageApi";
 
 const items = [
   {
@@ -92,7 +94,9 @@ const items = [
 ];
 
 const Header = () => {
+  const {data: profile} = useGetProfileQuery()
   const [selectedKey, setSelectedKey] = useState("dashboard");
+  const {data:dashboard} = useGetDashboradQuery()
   const [expandedKeys, setExpandedKeys] = useState([]);
   const navigate = useNavigate();
  
@@ -256,22 +260,22 @@ const Header = () => {
             </Drawer>
 
             <span className="absolute top-0 right-0 -mr-2  w-5 h-5 bg-white text-black text-xs flex items-center justify-center rounded-full">
-              0
+              {dashboard?.notification_count || 0}
             </span>
           </div>
 
           <Link to={"/dashboard/Settings/profile"}>
-            <div className="flex gap-3">
+            <div className="flex gap-3 items-center">
               <div>
                 <img
-                  className="w-[45px] h-[45px]"
-                  src={profilee}
+                  className="w-[45px] h-[45px] rounded-full"
+                  src={profile?.photo_url}
                   alt="profile"
                 />
               </div>
               <div className="text-end">
-                <h3>{ "Loading..."}</h3>
-                <h4 className="text-sm">Admin</h4>
+                <h3 className="text-black">{ profile?.name}</h3>
+                <h4 className="text-sm text-black">Admin</h4>
               </div>
             </div>
           </Link>

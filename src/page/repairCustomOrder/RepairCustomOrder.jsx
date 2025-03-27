@@ -1,4 +1,4 @@
-import { Table, Input, Space, Modal, message } from "antd";
+import { Table, Input, Space, Modal, message, Pagination } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import { LuEye } from "react-icons/lu";
 import { MdModeEditOutline } from "react-icons/md";
@@ -11,10 +11,13 @@ import { useGetOrderRepairQuery } from "../redux/api/orderApi";
 
 const RepairCustomOrder = () => {
   const [modal2Open, setModal2Open] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10;
   const [selectedRecord, setSelectedRecord] = useState(null);
   console.log(selectedRecord)
   const [editModal, setEditModal] = useState(false);
-  const { data: orderRepair, error, isLoading } = useGetOrderRepairQuery();
+  const { data: orderRepair, error, isLoading } = useGetOrderRepairQuery({page: currentPage,
+    limit: pageSize,});
   const navigate = useNavigate();
 
   // Handle loading, error, or no data scenarios
@@ -25,6 +28,10 @@ const RepairCustomOrder = () => {
   const openModal = (record) => {
     setSelectedRecord(record);
     setModal2Open(true);
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
   };
 
   const closeModal = () => {
@@ -138,8 +145,19 @@ const RepairCustomOrder = () => {
       <Table
         columns={columns}
         dataSource={userData}
-        pagination={{ pageSize: 10, position: ["bottomCenter"] }}
+        pagination={false}
       />
+
+       <div className="mt-4 flex justify-end">
+                <Pagination
+                  current={currentPage}
+                  pageSize={pageSize}
+                  total={orderRepair?.pagination?.totalContacts || 0}
+                  onChange={handlePageChange}
+                  showSizeChanger={false}
+                  
+                />
+              </div>
 
       <Modal
         centered

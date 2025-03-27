@@ -1,4 +1,4 @@
-import { Table, Modal, Space, message } from "antd";
+import { Table, Modal, Space, message, Pagination } from "antd";
 import { useState } from "react";
 import { MdModeEditOutline } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
@@ -11,8 +11,11 @@ import Navigate from "../../Navigate";
 
 const Items = () => {
   const [openAddModal, setOpenAddModal] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10;
   const[deleteProduct] = useDeleteProductMutation()
-  const { data: allProduct } = useGetAllProductQuery();
+  const { data: allProduct } = useGetAllProductQuery({page: currentPage,
+    limit: pageSize,});
   const [modal2Open, setModal2Open] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [selectedRecord, setSelectedRecord] = useState(null);
@@ -25,6 +28,11 @@ const Items = () => {
     setSelectedRecord(record);
     setModal2Open(true);
   };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
 
   const closeModal = () => {
     setModal2Open(false);
@@ -163,8 +171,20 @@ const Items = () => {
       <Table
         columns={columns}
         dataSource={userData}
-        pagination={{ pageSize: 10, position: ["bottomCenter"] }}
+        pagination={false}
       />
+
+<div className="mt-4 flex justify-end">
+          <Pagination
+            current={currentPage}
+            pageSize={pageSize}
+            total={allProduct?.pagination?.totalProducts || 0}
+            onChange={handlePageChange}
+            showSizeChanger={false}
+            
+          />
+        </div>
+
 
       <Modal
         centered

@@ -6,7 +6,7 @@ import img2 from "../../assets/header/img3.png";
 import img3 from "../../assets/header/img4.png";
 import img4 from "../../assets/header/img5.png";
 import { Link } from "react-router-dom";
-import { useGetAppointmentQuery } from "../../page/redux/api/manageApi";
+import { useGetAppointmentQuery, useGetDashboradQuery } from "../../page/redux/api/manageApi";
 import { Button, Modal, Table } from "antd";
 import { EyeOutlined } from "@ant-design/icons";
 import { useState } from "react";
@@ -14,6 +14,7 @@ const Dashboard = () => {
   const [open, setOpen] = useState(false);
   const [selectedShop, setSelectedShop] = useState(null);
   const { data: appointment = [] } = useGetAppointmentQuery();
+  const {data:dashboard} = useGetDashboradQuery()
 
   const dataSource = appointment?.appointments?.slice(0,5)?.map((item, index) => ({
     key: index + 1,
@@ -95,7 +96,7 @@ const Dashboard = () => {
           <div className="flex justify-center my-4">
             <img className="w-[60px] h-[60px]" src={img1} alt="" />
           </div>
-          <h1 className="text-3xl font-bold">123</h1>
+          <h1 className="text-3xl font-bold">{dashboard?.total_users || 0}</h1>
         </div>
         <div className=" bg-white py-6 rounded-md">
           <p className=" mt-3 text-2xl">Order Completed</p>
@@ -103,21 +104,21 @@ const Dashboard = () => {
           <div className="flex justify-center my-4">
             <img className="w-[60px] h-[60px]" src={img2} alt="" />
           </div>
-          <h1 className="text-3xl font-bold">9</h1>
+          <h1 className="text-3xl font-bold">{dashboard?.orders_completed || 0}</h1>
         </div>
         <div className=" bg-white py-6 rounded-md">
           <p className=" mt-3 text-2xl">Total Income</p>
           <div className="flex justify-center my-4">
             <img className="w-[60px] h-[60px]" src={img3} alt="" />
           </div>
-          <h1 className="text-3xl font-bold">9</h1>
+          <h1 className="text-3xl font-bold">{dashboard?.total_income || 0}</h1>
         </div>
         <div className=" bg-white py-6 rounded-md">
           <p className=" mt-3 text-2xl">Total Items</p>
           <div className="flex justify-center my-4">
             <img className="w-[60px] h-[60px]" src={img4} alt="" />
           </div>
-          <h1 className="text-3xl font-bold">9</h1>
+          <h1 className="text-3xl font-bold">{dashboard?.total_items || 0}</h1>
         </div>
       </div>
       <div className="grid grid-cols-2 gap-4">

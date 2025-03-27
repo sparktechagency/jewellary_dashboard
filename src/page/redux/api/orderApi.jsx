@@ -5,9 +5,9 @@ const order = baseApi.injectEndpoints({
   endpoints: (builder) => ({
 
     getOrder: builder.query({
-      query: () => {
+      query: ({limit, page}) => {
         return {
-          url: `/admin/orders?type=ready-made`,
+          url: `/admin/orders?type=ready-made&limit=${limit}&page=${page}`,
           method: "GET",
         };
       },
@@ -15,9 +15,9 @@ const order = baseApi.injectEndpoints({
     }),
 
     getOrderRepair: builder.query({
-      query: () => {
+      query: ({page,limit}) => {
         return {
-          url: `/admin/orders?type=custom`,
+          url: `/admin/orders?type=custom&limit=${limit}&page=${page}`,
           method: "GET",
         };
       },
@@ -35,6 +35,7 @@ const order = baseApi.injectEndpoints({
       invalidatesTags: ["updateProfile"],
     }),
 
+    
 
   }),
 });

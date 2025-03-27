@@ -1,4 +1,4 @@
-import { Table, Input, Space, Modal, Spin, message } from "antd";
+import { Table, Input, Space, Modal, Spin, message, Pagination } from "antd";
 import { LoadingOutlined, SearchOutlined } from "@ant-design/icons";
 import { MdBlockFlipped, MdModeEditOutline } from "react-icons/md";
 import { LuEye } from "react-icons/lu";
@@ -10,13 +10,21 @@ import OrderEdit from "./OrderEdit";
 const OrderManagement = () => {
   const [modal2Open, setModal2Open] = useState(false);
   const [selectedRecord, setSelectedRecord] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10;
   console.log(selectedRecord)
   const [editModal, setEditModal] = useState(false);
-  const { data: orderData, isLoading, isError } = useGetOrderQuery();
+  const { data: orderData, isLoading, isError } = useGetOrderQuery({page: currentPage,
+    limit: pageSize,});
   const navigate = useNavigate();
 
   if (isLoading) return <Spin indicator={<LoadingOutlined />} />;
   if (isError) return <p>Failed to load orders</p>;
+
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
 
   const orders = orderData?.orders?.map((order, index) => ({
     key: order?._id,
@@ -104,9 +112,18 @@ const OrderManagement = () => {
       <Table
         columns={columns}
         dataSource={orders}
-        pagination={{ pageSize: 10, position: ["bottomCenter"] }}
+        pagination={false}
       />
-      
+       <div className="mt-4 flex justify-end">
+          <Pagination
+            current={currentPage}
+            pageSize={pageSize}
+            total={orderData?.pagination?.totalContacts || 0}
+            onChange={handlePageChange}
+            showSizeChanger={false}
+            
+          />
+        </div>
 
       {/* Modal for Order Details */}
       <Modal

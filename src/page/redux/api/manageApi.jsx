@@ -43,6 +43,16 @@ const manage = baseApi.injectEndpoints({
       providesTags: ["updateProfile"],
     }),
 
+    getNotification: builder.query({
+      query: () => {
+        return {
+          url: `/admin/dashboard/notifications`,
+          method: "GET",
+        };
+      },
+      providesTags: ["updateProfile"],
+    }),
+
     addFaq: builder.mutation({
       query: (data) => {
         return {
@@ -92,6 +102,16 @@ const manage = baseApi.injectEndpoints({
       },
       providesTags: ["updateProfile"],
     }),
+
+    getDashborad: builder.query({
+      query: () => {
+        return {
+          url: `/admin/dashboard`,
+          method: "GET",
+        };
+      },
+      providesTags: ["updateProfile"],
+    }),
   }),
 });
 
@@ -104,5 +124,7 @@ export const {
   useUpdateFaqMutation,
   useDeleteFaqMutation,
   useGetContactQuery,
-  useDeleteCategoryMutation
+  useDeleteCategoryMutation,
+  useGetNotificationQuery,
+  useGetDashboradQuery
 } = manage;
