@@ -20,13 +20,13 @@ import {
 } from "../redux/api/categoryApi";
 
 export const AddItem = ({ openAddModal, setOpenAddModal }) => {
-  
+
   const editor = useRef(null);
   const [content, setContent] = useState("");
   const [form] = Form.useForm();
   const { data: category } = useGetCategoryQuery();
   const [selectedCategory, setSelectedCategory] = useState(null);
-const [addProduct] = useAddProductMutation()
+  const [addProduct] = useAddProductMutation()
   const { data: subCategoryData, isLoading } = useGetSubCategoryQuery(
     {
       id: selectedCategory,
@@ -60,7 +60,7 @@ const [addProduct] = useAddProductMutation()
     imgWindow?.document.write(image.outerHTML);
   };
 
- 
+
   const handleCancel = () => {
     form.resetFields();
     setFileList([]);
@@ -68,63 +68,63 @@ const [addProduct] = useAddProductMutation()
   };
 
   const handleSubmit = (values) => {
-   
+
     const formData = new FormData();
     formData.append("name", values?.name);
     formData.append("category", values.subCategory ? values.subCategory : values.category);
     formData.append("price", values?.price);
-    formData.append("description", content); 
+    formData.append("description", content);
     formData.append("availability", values?.availability);
     formData.append("discount_price", values?.discount_price);
     formData.append("details", values?.details);
     formData.append("sizes", JSON.stringify(values?.sizes || []));
-    formData.append("colors", JSON.stringify(values?.colors || [])); 
+    formData.append("colors", JSON.stringify(values?.colors || []));
     fileList.forEach((file) => {
       formData.append("images", file.originFileObj);
     });
-    
+
     addProduct(formData)
       .then((response) => {
-      
+
         setOpenAddModal(false);
 
         if (response) {
-         
+
           message.success(response?.data?.message);
           form.resetFields();
         }
         setFileList([]);
-       
+
       })
       .catch((error) => {
         message.error(error?.data?.message);
         console.error("Error submitting form:", error);
-       
-      });
-      
-      
-     
-    };
 
-    const config = {
-      readonly: false,
-      placeholder: "Start typings...",
-      style: {
-        height: 500,
-      },
-      buttons: [
-        "image",
-        "fontsize",
-        "bold",
-        "italic",
-        "underline",
-        "|",
-        "font",
-        "brush",
-        "align",
-      ],
-    };
-    
+      });
+
+
+
+  };
+
+  const config = {
+    readonly: false,
+    placeholder: "Start typings...",
+    style: {
+      height: 500,
+    },
+    buttons: [
+      "image",
+      "fontsize",
+      "bold",
+      "italic",
+      "underline",
+      "|",
+      "font",
+      "brush",
+      "align",
+    ],
+  };
+
 
   return (
     <Modal
@@ -174,39 +174,39 @@ const [addProduct] = useAddProductMutation()
           </Form.Item>
           {/* Price */}
           <Form.Item
-  label="Price"
-  name="price"
-  rules={[
-    { required: true, message: "Please enter the price!" },
-    { type: "number", min: 1, message: "Price must be at least $1" },
-  ]}
->
-  <Input
-    type="number"
-    placeholder="Enter price ($)"
-    onChange={(e) => form.setFieldsValue({ price: Number(e.target.value) })}
-  />
-</Form.Item>
+            label="Price"
+            name="price"
+            rules={[
+              { required: true, message: "Please enter the price!" },
+              { type: "number", min: 1, message: "Price must be at least $1" },
+            ]}
+          >
+            <Input
+              type="number"
+              placeholder="Enter price ($)"
+              onChange={(e) => form.setFieldsValue({ price: Number(e.target.value) })}
+            />
+          </Form.Item>
 
-{/* Discount Price */}
-<Form.Item
-  label="Discount Price (Optional)"
-  name="discount_price"
-  dependencies={["price"]} 
-  rules={[
-    ({ getFieldValue }) => ({
-      validator(_, value) {
-        const price = getFieldValue("price");
-        if (!value || value < price) {
-          return Promise.resolve();
-        }
-        return Promise.reject(new Error("Discount price must be less than the actual price!"));
-      },
-    }),
-  ]}
->
-  <Input type="number" placeholder="Enter discount price ($)" />
-</Form.Item>
+          {/* Discount Price */}
+          <Form.Item
+            label="Discount Price (Optional)"
+            name="discount_price"
+            dependencies={["price"]}
+            rules={[
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  const price = getFieldValue("price");
+                  if (!value || value < price) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(new Error("Discount price must be less than the actual price!"));
+                },
+              }),
+            ]}
+          >
+            <Input type="number" placeholder="Enter discount price ($)" />
+          </Form.Item>
 
           {/* Sizes */}
           <Form.List
@@ -247,6 +247,7 @@ const [addProduct] = useAddProductMutation()
                         noStyle
                       >
                         <Input
+                        type="number"
                           placeholder="Size Here"
                           style={{ width: "93%" }}
                         />
@@ -362,14 +363,14 @@ const [addProduct] = useAddProductMutation()
 
           {/* Description */}
           <Form.Item label="Description" name="description">
-  <JoditEditor
-    ref={editor}
-    value={content}
-    config={config}
-    tabIndex={1}
-    onBlur={(newContent) => setContent(newContent)} // Content Update
-  />
-</Form.Item>
+            <JoditEditor
+              ref={editor}
+              value={content}
+              config={config}
+              tabIndex={1}
+              onBlur={(newContent) => setContent(newContent)} // Content Update
+            />
+          </Form.Item>
 
 
           {/* Upload Image */}

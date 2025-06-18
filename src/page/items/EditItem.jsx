@@ -270,6 +270,7 @@ const [updateProdust] = useUpdateProductMutation()
                         noStyle
                       >
                         <Input
+                        type="number"
                           placeholder="Size Here"
                           style={{ width: "93%" }}
                         />
