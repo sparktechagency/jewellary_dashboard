@@ -19,6 +19,7 @@ const RepairCustomOrder = () => {
   const { data: orderRepair, error, isLoading } = useGetOrderRepairQuery({page: currentPage,
     limit: pageSize,});
   const navigate = useNavigate();
+  console.log(orderRepair)
 
   // Handle loading, error, or no data scenarios
   if (isLoading) return <div>Loading...</div>;
@@ -49,10 +50,10 @@ const RepairCustomOrder = () => {
     key: order?._id,
     sl: index + 1,
     orderType: order?.order_type,
-    name: order?.custom_order_details?.name,
-    shippingAddress: order?.custom_order_details?.address,
+   
+    // shippingAddress: order?.custom_order_details?.address,
     date: new Date(order?.createdAt).toLocaleDateString(),
-    contactNumber: order?.custom_order_details?.phone,
+    // contactNumber: order?.custom_order_details?.phone,
     jewelry_type: order?.custom_order_details?.jewelry_type,
     email: order?.custom_order_details?.email,
     description: order?.custom_order_details?.description,
@@ -74,19 +75,16 @@ const RepairCustomOrder = () => {
       dataIndex: "orderType",
     },
     {
-      title: "Customer Name",
-      dataIndex: "name",
-      width: 150,
+      title: "Custom Order Price",
+      dataIndex: "custom_order_price",
+      width: 200,
     },
     {
       title: "Date",
       dataIndex: "date",
     },
  
-    {
-      title: "Shipping Address",
-      dataIndex: "shippingAddress",
-    },
+
     {
       title: "Payment Status",
       key: "payment",
@@ -169,41 +167,38 @@ const RepairCustomOrder = () => {
         className="no-border-radius-modal"
         closeIcon={<span className="text-lg text-black">×</span>}
       >
-        <div className="flex justify-center py-8">
+        {/* <div className="flex justify-center py-8">
           <img
             className="w-[70px] h-[70px] "
             src={selectedRecord?.image_url}
             alt="profile"
           />
-        </div>
+        </div> */}
         <div>
           <div className="grid grid-cols-2">
             <div className="text-md gap-4 space-y-3 font-semibold">
-              <h4>Name</h4>
-              <h4>Date</h4>
-              <h4>Phone</h4>
-              <h4>Shipping Address</h4>
-              <h4>Email:</h4>
-              <h4>Jewelry type</h4>
-              <h4>Price</h4>
-              <h4>Payment Status:</h4>
-              <h4>Order Status</h4>
+              <h4>Date : </h4>
+              <h4>cutom order price : </h4>
+              <h4>Order Type : </h4>
+              <h4>Payment Status : </h4>
+              <h4>Order Status :</h4>
+              
             </div>
             <div className="gap-4 text-md space-y-3">
-              <h3>{selectedRecord?.name}</h3>
-              <h3>{new Date(selectedRecord?.createdAt).toLocaleDateString() || "N/A"}</h3>
-              <h3>{selectedRecord?.contactNumber || "N/A"}</h3>
-              <h3>{selectedRecord?.shippingAddress || "N/A"}</h3>
-              <h3>{selectedRecord?.email || "N/A"}</h3>
-              <h3>{selectedRecord?.jewelry_type || "N/A"}</h3>
+       
+              <h3>{selectedRecord?.date}</h3>
+              
+             
+              <h3>{selectedRecord?.custom_order_price || "N/A"}</h3>
+              <h3>{selectedRecord?.orderType || "N/A"}</h3>
              
               <h3>{selectedRecord?.paymentStatus || "N/A"}</h3>
-              <h3>{selectedRecord?.custom_order_price || "N/A"}</h3>
               <h3>{selectedRecord?.order_status || "N/A"}</h3>
+              
               
             </div>
           </div>
-          <h1 className="mt-3"><span className="font-semibold">Description:</span> {selectedRecord?.description || "N/A"}</h1>
+          {/* <h1 className="mt-3"><span className="font-semibold">Description:</span> {selectedRecord?.description || "N/A"}</h1> */}
         </div>
       </Modal>
       <RepairCustomEdit

@@ -16,6 +16,7 @@ const OrderManagement = () => {
   const [editModal, setEditModal] = useState(false);
   const { data: orderData, isLoading, isError } = useGetOrderQuery({page: currentPage,
     limit: pageSize,});
+    console.log(orderData)
   const navigate = useNavigate();
 
   if (isLoading) return <Spin indicator={<LoadingOutlined />} />;
@@ -148,43 +149,44 @@ const OrderManagement = () => {
               </div>
               <div className="gap-4 text-md space-y-3">
               
-                <h3>{selectedRecord.shippingAddress}</h3>
-                <h3>{selectedRecord.date}</h3>
-                <h3>${selectedRecord.total}</h3>
-                <h3>{selectedRecord.paymentStatus}</h3>
-                <h3>{selectedRecord.orderStatus}</h3>
+                <h3>{selectedRecord?.shippingAddress}</h3>
+                <h3>{selectedRecord?.date}</h3>
+                <h3>${selectedRecord?.total}</h3>
+
+                <h3>{selectedRecord?.paymentStatus}</h3>
+                <h3>{selectedRecord?.orderStatus}</h3>
               </div>
             </div>
 
             <div className="mt-4">
               <p className="font-bold">Order Items:</p>
               <div className="border rounded p-2">
-                {selectedRecord.details.ready_made_details.products.map(
+                {selectedRecord?.details?.ready_made_details?.products.map(
                   (item, index) => (
                     <div
                       key={item._id}
                       className="flex justify-between items-center border-b py-2"
                     >
                       <div>
-                      <p>Color: {item.color}</p>
+                      <p>Color: {item?.color}</p>
+                      </div>
+                        <div>
+                      <p>Size: {item?.size}</p>
                       </div>
                       <div>
-                      <p>Size: {item.size}</p>
-                      </div>
-                      <div>
-                        <p className="font-medium">{item.product_id.name}</p>
+                        <p className="font-medium">{item?.product_id?.name}</p>
                         
                        
                       </div>
                       <div>
-                        <p>Qty: {item.quantity}</p>
+                        <p>Qty: {item?.quantity}</p>
                       </div>
                       <div>
-                        <p>Price: ${item.product_id.discount_price  || item.product_id.price}</p>
+                        <p>Price: ${item?.product_id?.discount_price  || item?.product_id?.price}</p>
                       </div>
                     </div>
                   )
-                )}
+                )}?
               </div>
             </div>
           </div>
