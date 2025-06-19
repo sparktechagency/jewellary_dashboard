@@ -70,7 +70,7 @@ const [updateProdust] = useUpdateProductMutation()
     setFileList([]);
     setEditModal1(false);
   };
-
+//ssdf
   const handleSubmit = (values) => {
     console.log(values)
  
