@@ -79,22 +79,22 @@ const manage = baseApi.injectEndpoints({
       query: (data) => ({
         url: `/admin/faq`,
         method: "DELETE",
-        body: {id:data},
+        body: { id: data },
       }),
-      invalidatesTags: ["updateProfile"],      
+      invalidatesTags: ["updateProfile"],
     }),
 
     deleteCategory: builder.mutation({
       query: (data) => ({
         url: `/admin/categories`,
         method: "DELETE",
-        body: {id:data},
+        body: { id: data },
       }),
-      invalidatesTags: ["updateProfile"],      
+      invalidatesTags: ["updateProfile"],
     }),
 
     getContact: builder.query({
-      query: ({page,limit}) => {
+      query: ({ page, limit }) => {
         return {
           url: `/admin/contact?page=${page}&limit=${limit}`,
           method: "GET",
@@ -104,10 +104,12 @@ const manage = baseApi.injectEndpoints({
     }),
 
     getDashborad: builder.query({
-      query: () => {
+      query: (params) => {
+
         return {
           url: `/admin/dashboard`,
           method: "GET",
+          params,
         };
       },
       providesTags: ["updateProfile"],

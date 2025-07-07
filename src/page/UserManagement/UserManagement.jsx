@@ -2,7 +2,6 @@ import { Table, Input, Space, Spin, message, Pagination } from "antd";
 import { LoadingOutlined, SearchOutlined } from "@ant-design/icons";
 import { MdBlockFlipped } from "react-icons/md";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Navigate from "../../Navigate";
 import { useBlockUserMutation, useGetAllUserManagementQuery } from "../redux/api/userApi";
 
@@ -14,7 +13,6 @@ const UserManagement = () => {
   console.log(userManagement)
   const [loadingId, setLoadingId] = useState(null);
   const[blockUser] = useBlockUserMutation()
-  const navigate = useNavigate();
   
   const handlePageChange = (page) => {
     setCurrentPage(page);

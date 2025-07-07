@@ -1,9 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Table, Button, Modal } from "antd";
 import { EyeOutlined } from "@ant-design/icons";
-import { IoCheckmarkSharp } from "react-icons/io5";
-import { RxCross2 } from "react-icons/rx";
-import { Link } from "react-router-dom";
 import { useGetAppointmentQuery } from "../../page/redux/api/manageApi";
 
 const Apointment = () => {

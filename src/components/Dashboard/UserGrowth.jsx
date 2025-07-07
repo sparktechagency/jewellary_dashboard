@@ -1,60 +1,58 @@
-import React, { useState } from 'react'
+/* eslint-disable react/prop-types */
 import { Select } from 'antd'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-const UserGrowth = () => {
-    const [year, setYear] = useState("2023"); // default selected year
-    const items = [
-      { value: '2023', label: '2023' },
-      { value: '2022', label: '2022' },
-      { value: '2021', label: '2021' }
-    ]; // options for Select
-  
-    const handleYearChange = (value) => {
-      setYear(value); // updates year when user selects from dropdown
-    };
-  
-    // Sample chart data (replace this with dynamic data if needed)
-    const chartData = [
-      { name: 'January', uv: 4000, pv: 2400 },
-      { name: 'February', uv: 3000, pv: 1398 },
-      { name: 'March', uv: 2000, pv: 9800 },
-      { name: 'April', uv: 2780, pv: 3908 },
-      { name: 'May', uv: 1890, pv: 4800 },
-      { name: 'June', uv: 2390, pv: 3800 },
-      { name: 'July', uv: 3490, pv: 4300 },
-    ];
-  
+const UserGrowth = ({ user_growth, setUserGrowthYear }) => {
+  const monthNames = [
+    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+  ];
+  const chartData = monthNames.map((month, index) => ({
+    month,
+    value: user_growth?.data?.[index]
+  }));
+
+  console.log('User Growth Overview rendered');
+
   return (
     <div>
-    <div className=''>
-      <div className="flex justify-between p-3 ">
-        <p className="text-xl font-medium">User Growth</p>
-        <Select
-          defaultValue={year}
-          onChange={handleYearChange}
-          style={{ width: 120 }}
-          options={items}
-        />
-      </div>
-      <div className="w-full h-[400px]">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart
-            data={chartData}
-            margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-            barSize={13}
+      <div className=''>
+        <div className="flex justify-between p-3 ">
+          <p className="text-xl font-medium">User Growth</p>
+          <Select
+            placeholder="Year"
+            style={{ width: 100 }}
+            defaultValue={new Date().getFullYear()}
+            onChange={(value) => setUserGrowthYear(value)}
           >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="uv" stackId="a" fill="#040404" radius={[25, 25, 0, 0]} />
-          </BarChart>
-        </ResponsiveContainer>
+            {Array.from({ length: 5 }, (_, i) => {
+              const year = new Date().getFullYear() - i;
+              return (
+                <Select.Option key={year} value={year}>
+                  {year}
+                </Select.Option>
+              );
+            })}
+          </Select>
+        </div>
+        <div className="w-full h-[400px]">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart
+              data={chartData}
+              margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
+              barSize={13}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="month" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="value" stackId="a" fill="#040404" radius={[25, 25, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
       </div>
     </div>
-  </div>
   )
 }
 

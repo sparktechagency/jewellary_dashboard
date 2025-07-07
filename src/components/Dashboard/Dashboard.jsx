@@ -1,4 +1,3 @@
-import Apointment from "./Apointment";
 import IncomeOverVeiw from "./IncomeOverVeiw";
 import UserGrowth from "./UserGrowth";
 import img1 from "../../assets/header/img2.png";
@@ -12,11 +11,18 @@ import { EyeOutlined } from "@ant-design/icons";
 import { useState } from "react";
 const Dashboard = () => {
   const [open, setOpen] = useState(false);
+  const [incomeYear, setIncomeYear] = useState(null);
+  const [userGrowthYear, setUserGrowthYear] = useState(null);
   const [selectedShop, setSelectedShop] = useState(null);
   const { data: appointment = [] } = useGetAppointmentQuery();
-  const {data:dashboard} = useGetDashboradQuery()
 
-  const dataSource = appointment?.appointments?.slice(0,5)?.map((item, index) => ({
+  
+  const { data: dashboard } = useGetDashboradQuery({ income_year: incomeYear, user_growth_year: userGrowthYear })
+  // const { data: dashboard } = useGetDashboradQuery({ income_year: incomeYear, user_growth_year: userGrowthYear })
+
+  console.log('Dashboard rendered');
+
+  const dataSource = appointment?.appointments?.slice(0, 5)?.map((item, index) => ({
     key: index + 1,
     userName: item.name,
     email: item.email,
@@ -123,20 +129,20 @@ const Dashboard = () => {
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div className="bg-white rounded p-3">
-          <IncomeOverVeiw></IncomeOverVeiw>
+          <IncomeOverVeiw income_overview={dashboard?.income_overview} setIncomeYear={setIncomeYear}></IncomeOverVeiw>
         </div>
         <div className="bg-white rounded">
-          <UserGrowth></UserGrowth>
+          <UserGrowth user_growth={dashboard?.user_growth} setUserGrowthYear={setUserGrowthYear}></UserGrowth>
         </div>
       </div>
 
       <div>
-      <div className="flex bg-white justify-between items-center px-4 mt-4">
-        <h2 className="text-lg font-semibold pb-2">Appointments</h2>
-        <button className="text-[#0022FF]">
-          <Link to={'/dashboard/Appointment'}>View all</Link>
-        </button>
-      </div>
+        <div className="flex bg-white justify-between items-center px-4 mt-4">
+          <h2 className="text-lg font-semibold pb-2">Appointments</h2>
+          <button className="text-[#0022FF]">
+            <Link to={'/dashboard/Appointment'}>View all</Link>
+          </button>
+        </div>
         <Table dataSource={dataSource} columns={columns} pagination={false} />
 
         <Modal
