@@ -8,12 +8,14 @@ import { useBlockUserMutation, useGetAllUserManagementQuery } from "../redux/api
 const UserManagement = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
-  const { data: userManagement, isLoading } = useGetAllUserManagementQuery({page: currentPage,
-    limit: pageSize,});
+  const { data: userManagement, isLoading } = useGetAllUserManagementQuery({
+    page: currentPage,
+    limit: pageSize,
+  });
   console.log(userManagement)
   const [loadingId, setLoadingId] = useState(null);
-  const[blockUser] = useBlockUserMutation()
-  
+  const [blockUser] = useBlockUserMutation()
+
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
@@ -26,30 +28,30 @@ const UserManagement = () => {
       userName: user?.name,
       email: user?.email,
       contactNumber: user?.phone,
-      address: `${user?.shipping_address?.street_address}, ${user?.shipping_address?.city}, ${user?.shipping_address?.state}, ${user?.shipping_address?.zip_code}`,
+      address: user?.shipping_address && `${user?.shipping_address?.street_address}, ${user?.shipping_address?.city}, ${user?.shipping_address?.state}, ${user?.shipping_address?.zip_code}`,
       status: user?.account_status,
     })) || [];
 
-    const handleBlockUnblock = async (record) => {
-      setLoadingId(record.key);
-      console.log(record.key)
-    
-      try {
-        const response = await blockUser(record.key).unwrap();
-    
-        if (response) {
-          console.log(response)
-          message.success(response?.message);
-        } 
-      } catch (error) {
-        console.error("Error updating user status:", error);
-        message.error(error?.data?.message);
+  const handleBlockUnblock = async (record) => {
+    setLoadingId(record.key);
+    console.log(record.key)
+
+    try {
+      const response = await blockUser(record.key).unwrap();
+
+      if (response) {
+        console.log(response)
+        message.success(response?.message);
       }
-    
-      setLoadingId(null);
-    };
-    
-    
+    } catch (error) {
+      console.error("Error updating user status:", error);
+      message.error(error?.data?.message);
+    }
+
+    setLoadingId(null);
+  };
+
+
 
   const columns = [
     { title: "SL no.", dataIndex: "sl", width: 70, align: "center" },
@@ -64,10 +66,9 @@ const UserManagement = () => {
       render: (_, record) => (
         <Space size="middle">
           <button
-             onClick={() => handleBlockUnblock(record)}
-            className={`${ 
-              record.status === "Banned" ? "bg-red-600" : "bg-gray-600"
-            } text-white w-[30px] h-[30px] flex justify-center text-xl items-center rounded-md`}
+            onClick={() => handleBlockUnblock(record)}
+            className={`${record.status === "Banned" ? "bg-red-600" : "bg-gray-600"
+              } text-white w-[30px] h-[30px] flex justify-center text-xl items-center rounded-md`}
             disabled={loadingId === record.key}
           >
             {loadingId === record.key ? (
@@ -97,16 +98,16 @@ const UserManagement = () => {
       ) : (
         <Table columns={columns} dataSource={userData} pagination={false} />
       )}
-       <div className="mt-4 flex justify-end">
-          <Pagination
-            current={currentPage}
-            pageSize={pageSize}
-            total={userManagement?.pagination?.totalUsers || 0}
-            onChange={handlePageChange}
-            showSizeChanger={false}
-            
-          />
-        </div>
+      <div className="mt-4 flex justify-end">
+        <Pagination
+          current={currentPage}
+          pageSize={pageSize}
+          total={userManagement?.pagination?.totalUsers || 0}
+          onChange={handlePageChange}
+          showSizeChanger={false}
+
+        />
+      </div>
     </div>
   );
 };
